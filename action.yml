@@ -45,9 +45,9 @@ runs:
         ollamaServe &
         sleep 3
 
-        echo "start to pull model:llama3"
+        echo "start to pull model:${{ inputs.model }}"
         ollama --version
-        ollama pull llama3
+        ollama pull ${{ inputs.model }}
         ollama list
         
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
@@ -55,7 +55,7 @@ runs:
           content=$(cat "$file")
           content=${content//\'/\'\'}
           content=$(echo "$content" | tr '\n' ' ')
-          review=$(curl -s http://127.0.0.1:11434/api/generate -d '{"model": "llama3", "prompt": "As a software engineer, please review the following code:\n\n```\n'"${content}"'\n```", "stream": false}' | jq -r '.response')
+          review=$(curl -s http://127.0.0.1:11434/api/generate -d '{"model": "${{ inputs.model }}", "prompt": "As a software engineer, please review the following code:\n\n```\n'"${content}"'\n```", "stream": false}' | jq -r '.response')
           echo $review
           comment="Ollama Code Review for \`$file\`:\n\n$review"
           echo "$comment" >> ollama_review.txt
