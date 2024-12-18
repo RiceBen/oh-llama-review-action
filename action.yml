@@ -52,10 +52,10 @@ runs:
         
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
           echo $file
-          content = $(cat "$file")
-          content = ${content//\'/\'\'}
-          content = $(echo "$content" | tr '\n' ' ')
-          review = $(curl -s http://127.0.0.1:11434/api/generate -d '{"model": "${{ inputs.model }}", "prompt": "As a software engineer, please review the following code:\n\n```\n'"${content}"'\n```", "stream": false}' | jq -r '.response')
+          content=$(cat "$file")
+          content=${content//\'/\'\'}
+          content=$(echo "$content" | tr '\n' ' ')
+          review=$(curl -s http://127.0.0.1:11434/api/generate -d '{"model": "${{ inputs.model }}", "prompt": "As a software engineer, please review the following code:\n\n```\n'"${content}"'\n```", "stream": false}' | jq -r '.response')
           echo $review
 
           if [[ $review == "null" ]]
