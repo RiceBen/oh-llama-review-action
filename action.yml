@@ -60,11 +60,11 @@ runs:
 
           if [[ $review == "null" ]]
           then
-            comment = "Ollama Code Review for \`$file\`: All good!"
+            comments="Ollama Code Review for \`$file\`: All good!"
           else
-            comment="Ollama Code Review for \`$file\`:\n\n$review"
+            comments="Ollama Code Review for \`$file\`:\n\n$review"
           fi
 
-          gh pr comment ${{ github.event.pull_request.number }} --body "${comment}"
+          gh pr comment ${{ github.event.pull_request.number }} --body "${comments}"
         done
       shell: bash
